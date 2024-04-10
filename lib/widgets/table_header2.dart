@@ -175,7 +175,6 @@ class _TableHeaderState extends State<TableHeader> {
     ).show();
   }
 
-
   @override
   void initState() {
     dimension = widget.dimension;
