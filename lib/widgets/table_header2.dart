@@ -16,31 +16,13 @@ class TableHeader extends StatefulWidget {
 }
 
 class _TableHeaderState extends State<TableHeader> {
-  final border = TableBorder.all(color: Colors.white);
-  List<Map<String, dynamic>> tableValues = [];
-  List<TableRow> rows = [];
 
-  TextEditingController labelCtrl = TextEditingController();
-  TextEditingController actLCtrl = TextEditingController();
-  TextEditingController actHCtrl = TextEditingController();
+  final border = TableBorder.all(color: Colors.white);
+  List<Map<String, dynamic>> tableValues = [
+    {'label':"", 'actL':0.0, 'actH':0.0}
+  ];
 
   String dimension = "";
-  String label = "";
-  double chargeL = 0;
-  double chargeH = 0;
-  int sr = 0;
-  double area = 0;
-  double actL = 0;
-  double actH = 0;
-  double chrL = 0;
-  double chrH = 0;
-  double handle =0;
-  double interlock =0;
-  double tBearing =0;
-  double glassL = 0;
-  double glassH =0;
-  double divideVal = 0;
-
 
   double onSubmit(String text) {
     String fraction = text;
@@ -67,69 +49,7 @@ class _TableHeaderState extends State<TableHeader> {
   void addRow() {
     setState(() {
       context.read<TableValuesProvider>().changeTableValues(tableValues);
-      actL = onSubmit(actLCtrl.text);
-      actH = onSubmit(actHCtrl.text);
-      label = labelCtrl.text;
-      chargeL = (6 - (actL % 6));
-      chargeH = (6 - (actH % 6));
-      if (chargeL == 6) {
-        chargeL = 0;
-      }
-      if (chargeH == 6) {
-        chargeH = 0;
-      }
-      sr++;
-      chrL = actL + chargeL;
-      chrH = actH + chargeH;
-      if (dimension == 'inch') {
-        handle = actH-1.375;
-        interlock = actH-1.375;
-        tBearing = (actL-6.25)/2;
-        glassL = tBearing + 0.625;
-        glassH = actH-3.875;
-        divideVal = 144;
-      } else {
-        handle = actH-34.925;
-        interlock = actH-34.925;
-        tBearing = (actL-158.75)/2;
-        glassL = tBearing + 15.875;
-        glassH = actH-98.425;
-        divideVal = 92903.04;
-      }
-
-
-
-      area = ((chrL * chrH ) / divideVal);
-      tableValues.add({
-        'sr': sr,
-        'label':label,
-        'actL': actL,
-        'actH': actH,
-        'chrL': chrL,
-        'chrH': chrH,
-        'handle':handle,
-        'interlock':interlock,
-        'tBearing':tBearing,
-        'glassL':glassL,
-        'glassH':glassH,
-        'area': area,
-      });
-      rows.add(TableRow(
-        children: [
-          CustomTableCell(text: '$sr'),
-          CustomTableCell(text: label),
-          CustomTableCell(text: checkWhole(actL)),
-          CustomTableCell(text: checkWhole(actH)),
-          CustomTableCell(text: '$chrL'),
-          CustomTableCell(text: '$chrH'),
-          CustomTableCell(text: checkWhole(handle)),
-          CustomTableCell(text: checkWhole(interlock)),
-          CustomTableCell(text: checkWhole(tBearing)),
-          CustomTableCell(text: checkWhole(glassL)),
-          CustomTableCell(text: checkWhole(glassH)),
-          CustomTableCell(text: checkWhole(area)),
-        ],
-      ));
+      tableValues.add({'label':"", 'actL':0.0, 'actH':0.0});
     });
   }
 
@@ -146,19 +66,15 @@ class _TableHeaderState extends State<TableHeader> {
   void deleteRow() {
     setState(() {
       context.read<TableValuesProvider>().changeTableValues(tableValues);
-      if (sr > 0) {
-        sr--;
         tableValues.removeLast();
-        rows.removeLast();
-      }
     });
   }
 
   void showTotal() {
-    num totalQty = sr;
+    num totalQty = tableValues.length+1;
     num totalArea = 0;
     for (var total in tableValues) {
-      totalArea += total['area'];
+      totalArea += total['actL'];
     }
     String strTotalArea = totalArea.toStringAsFixed(2);
     Alert(
@@ -179,14 +95,6 @@ class _TableHeaderState extends State<TableHeader> {
   void initState() {
     dimension = widget.dimension;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    actLCtrl.dispose();
-    actHCtrl.dispose();
-    labelCtrl.dispose();
-    super.dispose();
   }
 
   @override
@@ -251,29 +159,105 @@ class _TableHeaderState extends State<TableHeader> {
                 CustomTableHeader(text: 'SQFt.'),
               ],
             ),
-            ...rows,
-          ],
-        ),
-        Table(
-          columnWidths: getColumnWidth(),
-          border: border,
-          children: [
-            TableRow(
-              children: [
-                const TableCell(child: SizedBox()),
-                CellTxtFieldTxt(controller: labelCtrl),
-                CellTxtField(controller: actLCtrl),
-                CellTxtField(controller: actHCtrl),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-                const TableCell(child: SizedBox()),
-              ],
-            ),
+            ...List<TableRow>.generate(tableValues.length, (index){
+              String label = index<tableValues.length?tableValues[index]['label']:"";
+              double actL = index<tableValues.length?tableValues[index]['actL']:0.0;
+              double actH = index<tableValues.length?tableValues[index]['actH']:0.0;
+              double chrL=0;
+              double chrH=0;
+              String getChargeL(){
+                double chargeL = (6 - (actL % 6));
+                if (chargeL == 6) {
+                  chargeL = 0;
+                }
+                chrL = actL+chargeL;
+                return checkWhole(chrL);
+              }
+              String getChargeH(){
+                double chargeH = (6 - (actH % 6));
+                if (chargeH == 6) {
+                  chargeH = 0;
+                }
+                chrH = actH+chargeH;
+                return checkWhole(chrH);
+              }
+              String getHandle(){
+                double handle = dimension=="inch"?actH-1.375:actH-34.925;
+                return checkWhole(handle);
+              }
+              String getTBearing(){
+                double tBearing =dimension=="inch"? (actL-6.25)/2:(actL-158.75)/2;
+                return checkWhole(tBearing);
+              }
+              String getGlassL(){
+                double glassL = dimension=="inch"?((actL-6.25)/2) + 0.625:((actL-158.75)/2)+15.875;
+                return checkWhole(glassL);
+              }
+              String getGlassH(){
+                double glassH = dimension=="inch"?actH-3.875:actH-98.425;
+                return checkWhole(glassH);
+              }
+              String getArea(){
+                double divideValue = dimension=="inch"?144:92903.04;
+                double area = ((chrL * chrH ) / divideValue);
+                return checkWhole(area);
+              }
+                return TableRow(
+                  children: [
+                    TableCell(child: Text((index + 1).toString())),
+                    TableCell(child: TextFormField(
+                      initialValue: label,
+                      keyboardType: TextInputType.text,
+                      onChanged: (newValue){
+                        setState(() {
+                          context.read<TableValuesProvider>().changeTableValues(tableValues);
+                          if (index < tableValues.length) {
+                            tableValues[index]['label'] = newValue;
+                          } else {
+                            tableValues.add({'label': newValue});
+                          }
+                        });
+                      },
+                    )),
+                    TableCell(child: TextFormField(
+                      initialValue: actL.toString(),
+                      keyboardType: TextInputType.datetime,
+                      onChanged: (newValue){
+                        setState(() {
+                          context.read<TableValuesProvider>().changeTableValues(tableValues);
+                          if (index < tableValues.length) {
+                            tableValues[index]['actL'] = onSubmit(newValue);
+                          } else {
+                            tableValues.add({'actL':onSubmit(newValue)});
+                          }
+                        });
+                      },
+                    )),
+                    TableCell(child: TextFormField(
+                      initialValue: actH.toString(),
+                      keyboardType: TextInputType.datetime,
+                      onChanged: (newValue){
+                        setState(() {
+                          context.read<TableValuesProvider>().changeTableValues(tableValues);
+                          if (index < tableValues.length) {
+                            tableValues[index]['actH'] = onSubmit(newValue);
+                          } else {
+                            tableValues.add({'actH': onSubmit(newValue)});
+                          }
+                        });
+                      },
+                    )),
+                    TableCell(child: Text(getChargeL())),
+                    TableCell(child: Text(getChargeH())),
+                    TableCell(child: Text(getHandle())),
+                    TableCell(child: Text(getHandle())),
+                    TableCell(child: Text(getTBearing())),
+                    TableCell(child: Text(getGlassL())),
+                    TableCell(child: Text(getGlassH())),
+                    TableCell(child: Text(getArea())),
+                  ],
+                );
+            }),
           ],
         ),
         const SizedBox(height: 20),
