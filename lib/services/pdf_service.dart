@@ -12,7 +12,7 @@ class PdfService {
 
     List<pw.Widget> pageWidgets = [];
     final logo =
-        (await rootBundle.load("images/logo.png")).buffer.asUint8List();
+    (await rootBundle.load("images/logo.png")).buffer.asUint8List();
     final logoArea = pw.Container(
         height: 60,
         decoration: pw.BoxDecoration(border: pw.Border.all()),
@@ -212,129 +212,11 @@ class PdfService {
         ],
       );
     }
-
-    // pw.Table tableFooter() {
-    //   num totBeforeTax = totalAmount + adminCharges + holesChr + cntChr;
-    //   num taxAmt = 0.09 * totBeforeTax;
-    //   num grandTotal = totBeforeTax + (2 * taxAmt);
-    //   return pw.Table(
-    //     columnWidths: const {
-    //       0: pw.FixedColumnWidth(90.0),
-    //       1: pw.FixedColumnWidth(160.0),
-    //       2: pw.FixedColumnWidth(145.0),
-    //       3: pw.FixedColumnWidth(60.0),
-    //     },
-    //     border: pw.TableBorder.all(),
-    //     children: [
-    //       pw.TableRow(
-    //         children: [
-    //           blankCell(),
-    //           blankCell(),
-    //           textCellBold("SUB TOTAL"),
-    //           textCellBold(totalAmount.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("GST NO:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("27AVHPT6781H1ZW",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           textCell("ADMIN CHARGES"),
-    //           textCell(adminCharges.toString()),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("A/C Name:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("SARASWATI ENTERPRISES")),
-    //           textCell("HOLES CHARGES"),
-    //           textCell(holesChr.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("A/C Number:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("758805000007",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           textCell("CUTOUT CHARGES"),
-    //           textCell(cntChr.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("A/C TYPE:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("CURRENT ACCOUNT")),
-    //           textCellBold("TOTAL BEFORE TAX"),
-    //           textCellBold(totBeforeTax.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("BRANCH:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("ICICI BANK")),
-    //           textCell("CGST @ 9%"),
-    //           textCell(taxAmt.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("IFSC CODE:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("ICIC0007588")),
-    //           textCell("SGST @ 9%"),
-    //           textCell(taxAmt.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //       pw.TableRow(
-    //         children: [
-    //           pw.Padding(
-    //               padding: const pw.EdgeInsets.all(2),
-    //               child: pw.Text("PAYMENT:",
-    //                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-    //           blankCell(),
-    //           textCellBold("GRAND TOTAL"),
-    //           textCellBold(grandTotal.toStringAsFixed(2)),
-    //         ],
-    //       ),
-    //     ],
-    //   );
-    // }
-
     pageWidgets.add(logoArea);
     pageWidgets.add(title);
     pageWidgets.add(title2);
     pageWidgets.add(tableHeader());
     pageWidgets.add(table());
-    // pageWidgets.add(tableFooter());
 
     pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a4,

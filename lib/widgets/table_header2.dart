@@ -88,7 +88,6 @@ class _TableHeaderState extends State<TableHeader> {
         isButtonVisible: false,
       ),
     ).show();
-    print(tableValues);
   }
 
   @override
@@ -222,7 +221,7 @@ class _TableHeaderState extends State<TableHeader> {
               }
               String getGlassH(){
                 double glassH = 0;
-                glassH =  dimension=="inch"?actH-3.875:actH-98.425;;
+                glassH =  dimension=="inch"?actH-3.875:actH-98.425;
                 if (index < tableValues.length) {
                   tableValues[index]['glassH'] = glassH;
                 } else {
@@ -317,11 +316,11 @@ class _TableHeaderState extends State<TableHeader> {
                       padding: const EdgeInsets.only(top: 14),
                       child: Center(child: Text(getHandle())))),
                   TableCell(child: Padding(
-              padding: const EdgeInsets.only(top: 14),
-              child: Center(child: Text(getHandle())))),
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getHandle())))),
                   TableCell(child: Padding(
-              padding: const EdgeInsets.only(top: 14),
-              child: Center(child: Text(getTBearing())))),
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getTBearing())))),
                   TableCell(child: Padding(
                       padding: const EdgeInsets.only(top: 14),
                       child: Center(child: Text(getGlassL())))),
