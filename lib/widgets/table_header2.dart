@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
 import '../provider/table_values_provider.dart';
 import 'custom_table_cell.dart';
 import 'dimension_button.dart';
@@ -66,15 +65,15 @@ class _TableHeaderState extends State<TableHeader> {
   void deleteRow() {
     setState(() {
       context.read<TableValuesProvider>().changeTableValues(tableValues);
-        tableValues.removeLast();
+      tableValues.removeLast();
     });
   }
 
   void showTotal() {
-    num totalQty = tableValues.length+1;
+    num totalQty = tableValues.length;
     num totalArea = 0;
     for (var total in tableValues) {
-      totalArea += total['actL'];
+      totalArea += total['area'];
     }
     String strTotalArea = totalArea.toStringAsFixed(2);
     Alert(
@@ -89,6 +88,7 @@ class _TableHeaderState extends State<TableHeader> {
         isButtonVisible: false,
       ),
     ).show();
+    print(tableValues);
   }
 
   @override
@@ -171,6 +171,11 @@ class _TableHeaderState extends State<TableHeader> {
                   chargeL = 0;
                 }
                 chrL = actL+chargeL;
+                if (index < tableValues.length) {
+                  tableValues[index]['chrL'] = chrL;
+                } else {
+                  tableValues.add({'chrL': chrL});
+                }
                 return checkWhole(chrL);
               }
               String getChargeH(){
@@ -179,33 +184,80 @@ class _TableHeaderState extends State<TableHeader> {
                   chargeH = 0;
                 }
                 chrH = actH+chargeH;
+                if (index < tableValues.length) {
+                  tableValues[index]['chrH'] = chrH;
+                } else {
+                  tableValues.add({'chrH': chrH});
+                }
                 return checkWhole(chrH);
               }
               String getHandle(){
                 double handle = dimension=="inch"?actH-1.375:actH-34.925;
+                if (index < tableValues.length) {
+                  tableValues[index]['handle'] = handle;
+                  tableValues[index]['interlock'] = handle;
+                } else {
+                  tableValues.add({'handle': handle});
+                  tableValues.add({'interlock': handle});
+                }
                 return checkWhole(handle);
               }
               String getTBearing(){
                 double tBearing =dimension=="inch"? (actL-6.25)/2:(actL-158.75)/2;
+                if (index < tableValues.length) {
+                  tableValues[index]['tBearing'] = tBearing;
+                } else {
+                  tableValues.add({'tBearing': tBearing});
+                }
                 return checkWhole(tBearing);
               }
               String getGlassL(){
                 double glassL = dimension=="inch"?((actL-6.25)/2) + 0.625:((actL-158.75)/2)+15.875;
+                if (index < tableValues.length) {
+                  tableValues[index]['glassL'] = glassL;
+                } else {
+                  tableValues.add({'glassL': glassL});
+                }
                 return checkWhole(glassL);
               }
               String getGlassH(){
-                double glassH = dimension=="inch"?actH-3.875:actH-98.425;
+                double glassH = 0;
+                glassH =  dimension=="inch"?actH-3.875:actH-98.425;;
+                if (index < tableValues.length) {
+                  tableValues[index]['glassH'] = glassH;
+                } else {
+                  tableValues.add({'glassH': glassH});
+                }
                 return checkWhole(glassH);
               }
               String getArea(){
+                double area=0;
                 double divideValue = dimension=="inch"?144:92903.04;
-                double area = ((chrL * chrH ) / divideValue);
+                area = ((chrL * chrH ) / divideValue);
+                if (index < tableValues.length) {
+                  tableValues[index]['area'] = area;
+                } else {
+                  tableValues.add({'area': area});
+                }
                 return checkWhole(area);
               }
-                return TableRow(
-                  children: [
-                    TableCell(child: Text((index + 1).toString())),
-                    TableCell(child: TextFormField(
+              String getSrNo(){
+                int srNo = index+1;
+                if (index < tableValues.length) {
+                  tableValues[index]['sr'] = srNo;
+                } else {
+                  tableValues.add({'sr': srNo});
+                }
+                return srNo.toString();
+              }
+              return TableRow(
+                children: [
+                  TableCell(child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getSrNo())))),
+                  TableCell(child: Padding(
+                    padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+                    child: TextFormField(
                       initialValue: label,
                       keyboardType: TextInputType.text,
                       onChanged: (newValue){
@@ -218,8 +270,11 @@ class _TableHeaderState extends State<TableHeader> {
                           }
                         });
                       },
-                    )),
-                    TableCell(child: TextFormField(
+                    ),
+                  )),
+                  TableCell(child: Padding(
+                    padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+                    child: TextFormField(
                       initialValue: actL.toString(),
                       keyboardType: TextInputType.datetime,
                       onChanged: (newValue){
@@ -232,8 +287,11 @@ class _TableHeaderState extends State<TableHeader> {
                           }
                         });
                       },
-                    )),
-                    TableCell(child: TextFormField(
+                    ),
+                  )),
+                  TableCell(child: Padding(
+                    padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+                    child: TextFormField(
                       initialValue: actH.toString(),
                       keyboardType: TextInputType.datetime,
                       onChanged: (newValue){
@@ -246,17 +304,35 @@ class _TableHeaderState extends State<TableHeader> {
                           }
                         });
                       },
-                    )),
-                    TableCell(child: Text(getChargeL())),
-                    TableCell(child: Text(getChargeH())),
-                    TableCell(child: Text(getHandle())),
-                    TableCell(child: Text(getHandle())),
-                    TableCell(child: Text(getTBearing())),
-                    TableCell(child: Text(getGlassL())),
-                    TableCell(child: Text(getGlassH())),
-                    TableCell(child: Text(getArea())),
-                  ],
-                );
+                    ),
+                  )),
+                  TableCell(child: Padding(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: Center(child: Text(getChargeL())),
+                  )),
+                  TableCell(child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getChargeH())))),
+                  TableCell(child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getHandle())))),
+                  TableCell(child: Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: Center(child: Text(getHandle())))),
+                  TableCell(child: Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: Center(child: Text(getTBearing())))),
+                  TableCell(child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getGlassL())))),
+                  TableCell(child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getGlassH())))),
+                  TableCell(child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Center(child: Text(getArea())))),
+                ],
+              );
             }),
           ],
         ),
