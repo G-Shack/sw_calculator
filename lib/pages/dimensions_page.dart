@@ -4,7 +4,7 @@ import 'package:sw_calculator/pages/pdf_preview_page.dart';
 
 import '../provider/table_values_provider.dart';
 import '../services/pdf_service.dart';
-import '../widgets/table_header2.dart';
+import '../widgets/table_header.dart';
 import '../widgets/table_template.dart';
 
 
