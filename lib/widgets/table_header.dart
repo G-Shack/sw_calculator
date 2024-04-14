@@ -159,7 +159,6 @@ class _TableHeaderState extends State<TableHeader> {
               ],
             ),
             ...List<TableRow>.generate(tableValues.length, (index){
-              String label = index<tableValues.length?tableValues[index]['label']:"";
               double actL = index<tableValues.length?tableValues[index]['actL']:0.0;
               double actH = index<tableValues.length?tableValues[index]['actH']:0.0;
               double chrL=0;
@@ -257,7 +256,6 @@ class _TableHeaderState extends State<TableHeader> {
                   TableCell(child: Padding(
                     padding: const EdgeInsets.only(left: 6.0, right: 6.0),
                     child: TextFormField(
-                      initialValue: label,
                       keyboardType: TextInputType.text,
                       onChanged: (newValue){
                         setState(() {
@@ -274,7 +272,6 @@ class _TableHeaderState extends State<TableHeader> {
                   TableCell(child: Padding(
                     padding: const EdgeInsets.only(left: 6.0, right: 6.0),
                     child: TextFormField(
-                      initialValue: actL.toString(),
                       keyboardType: TextInputType.datetime,
                       onChanged: (newValue){
                         setState(() {
@@ -291,7 +288,6 @@ class _TableHeaderState extends State<TableHeader> {
                   TableCell(child: Padding(
                     padding: const EdgeInsets.only(left: 6.0, right: 6.0),
                     child: TextFormField(
-                      initialValue: actH.toString(),
                       keyboardType: TextInputType.datetime,
                       onChanged: (newValue){
                         setState(() {

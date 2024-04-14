@@ -47,17 +47,10 @@ class _StartPageState extends State<StartPage> {
           child: Center(
             child: Column(
               children: [
-                Material(
-                  elevation: 15,
-                  shadowColor: Colors.amberAccent,
-                  shape: const CircleBorder(),
-                  child: CircleAvatar(
-                    radius: (MediaQuery.of(context).size.width/2)-50,
-                    backgroundImage: const AssetImage('images/logo.png'),
-                  ),
-                ),
+                ClipRRect(borderRadius: BorderRadius.circular(24), child: Image.asset('gifs/window.gif',
+                    width: (MediaQuery.of(context).size.width)-50)),
                 const SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 const Text(
                   "Select Unit",
@@ -128,7 +121,7 @@ class _StartPageState extends State<StartPage> {
                       'Bill',
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(width: 25),
                     SizedBox(
@@ -151,17 +144,17 @@ class _StartPageState extends State<StartPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => DimensionsPage(
-                                    dimension: selectedUnit,
-                                    billName: billName.text,
-                                  )));
+                                dimension: selectedUnit,
+                                billName: billName.text,
+                              )));
                     } else if (selectedUnit == "mm" && billName.text != "") {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => DimensionsPage(
-                                    dimension: selectedUnit,
-                                    billName: billName.text,
-                                  )));
+                                dimension: selectedUnit,
+                                billName: billName.text,
+                              )));
                     } else {
                       var emptySnack = const SnackBar(
                         content: Text(
